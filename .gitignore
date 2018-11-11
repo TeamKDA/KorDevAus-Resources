@@ -328,3 +328,7 @@ ASALocalRun/
 
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
+
+# KDA specific
+**/Resources/*.json
+**/Resources.Tests/*.xml
