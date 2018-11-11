@@ -1,0 +1,132 @@
+$schema: https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#
+contentVersion: 1.0.0.0
+parameters:
+  organisation:
+    type: string
+    metadata:
+      description: The organisation that the resource group or resource is owned by. Descriptive, used for metadata.
+    allowedValues:
+    - Team KDA
+    defaultValue: Team KDA
+  organisationCode:
+    type: string
+    metadata:
+      description: The organisation that the resource group or resource is owned by. Short, used for resource naming.
+    allowedValues:
+    - kda
+    defaultValue: kda
+  environment:
+    type: string
+    metadata:
+      description: Whether this resource is Dev/Test/Prod/etc.
+    allowedValues:
+    - LOCAL
+    - DEVELOPMENT
+    - TEST
+    - PRODUCTION
+    - ALL
+    defaultValue: DEVELOPMENT
+  environmentCode:
+    type: string
+    metadata:
+      description: Whether this resource is Dev/Test/Prod/etc.
+    allowedValues:
+    - lcl
+    - dev
+    - tst
+    - prd
+    - all
+    defaultValue: dev
+  location:
+    type: string
+    metadata:
+      description: The region where Application Insights instance is hosted.
+    allowedValues:
+    - australiasoutheast
+    - australiaeast
+    - southcentralus
+    - "[resourceGroup().location]"
+    defaultValue: "[resourceGroup().location]"
+  locationCode:
+    type: string
+    metadata:
+      description: The Azure region that the resource is deployed to.
+    allowedValues:
+    - ase
+    - aue
+    - usc
+    defaultValue: ase
+  resourceTypeSuffix:
+    type: string
+    metadata:
+      description: The suffix of resource type to identify multiple resources in case same resource type exists. eg) 01, 02, etc...
+    defaultValue: ""
+
+  operation:
+    type: string
+    metadata:
+      description: The name of operation that the resource performs. eg) common, sales, etc...
+    defaultValue: ""
+  projectName:
+    type: string
+    metadata:
+      description: The name of the project the resource group or resource was provisioned for.
+    defaultValue: NOT_SET
+
+  skuName:
+    type: string
+    metadata:
+      description: The name of SKU for App Service Plan.
+    defaultValue: Y1
+  skuTier:
+    type: string
+    metadata:
+      description: The tier of SKU for App Service Plan.
+    defaultValue: Dynamic
+  skuSize:
+    type: string
+    metadata:
+      description: The size of SKU for App Service Plan.
+    defaultValue: Y1
+  skuFamily:
+    type: string
+    metadata:
+      description: The family of SKU for App Service Plan.
+    defaultValue: "Y"
+  skuCapacity:
+    type: int
+    metadata:
+      description: The capacity of SKU for App Service Plan.
+    defaultValue: 1
+variables:
+  resourceNameLongTemplate: "[toLower(concat('{0}', '-', parameters('organisationCode'), '-', parameters('environmentCode'), '-', parameters('locationCode')))]"
+  resourceNameShortTemplate: "[replace(variables('resourceNameLongTemplate'), '-', '')]"
+  consumptionPlan:
+    name: "[replace(variables('resourceNameLongTemplate'), '{0}', 'csplan')]"
+    apiVersion: "[providers('Microsoft.Web', 'serverfarms').apiVersions[0]]"
+    location: "[parameters('location')]"
+    sku:
+      name: "[parameters('skuName')]"
+      tier: "[parameters('skuTier')]"
+      size: "[parameters('skuSize')]"
+      family: "[parameters('skuFamily')]"
+      capacity: "[parameters('skuCapacity')]"
+  tags:
+    organisation: "[parameters('organisation')]"
+    environment: "[parameters('environment')]"
+    projectName: "[parameters('projectName')]"
+resources:
+- comments: "### RESOURCE - CONSUMPTION PLAN (WINDOWS) ###"
+  apiVersion: "[variables('consumptionPlan').apiVersion]"
+  type: Microsoft.Web/serverfarms
+  kind: functionapp
+  location: "[variables('consumptionPlan').location]"
+  tags: "[variables('tags')]"
+  name: "[variables('consumptionPlan').name]"
+  sku: "[variables('consumptionPlan').sku]"
+  properties:
+    name: "[variables('consumptionPlan').name]"
+outputs:
+  consumptionPlanName:
+    type: string
+    value: "[variables('consumptionPlan').name]"
