@@ -5,9 +5,9 @@
 Param(
     [string] [Parameter(Mandatory=$true)] $ResourceGroupName,
     [string] [Parameter(Mandatory=$true)] $SrcDirectory,
-    [string] [Parameter(Mandatory=$true)] $Username,
-    [string] [Parameter(Mandatory=$true)] $Password,
-    [string] [Parameter(Mandatory=$true)] $TenantId,
+    [string] [Parameter(Mandatory=$false)] $Username = $null,
+    [string] [Parameter(Mandatory=$false)] $Password = $null,
+    [string] [Parameter(Mandatory=$false)] $TenantId = $null,
     [bool] [Parameter(Mandatory=$false)] $IsLocal = $false
 )
 
