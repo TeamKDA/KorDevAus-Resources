@@ -73,13 +73,6 @@ parameters:
       description: The name of the project the resource group or resource was provisioned for.
     defaultValue: NOT_SET
 
-  sqlServerVersion:
-    type: string
-    metadata:
-      description: The version of Azure SQL Server
-    allowedValues:
-    - "12.0"
-    defaultValue: "12.0"
   sqlDatabaseName:
     type: string
     metadata:
@@ -115,7 +108,6 @@ variables:
     name: "[replace(variables('resourceNameLongTemplate'), '{0}', concat('sqlsvr', parameters('resourceTypeSuffix')))]"
     apiVersion: "[providers('Microsoft.Sql', 'servers').apiVersions[0]]"
     location: "[parameters('location')]"
-    version: "[float(parameters('sqlServerVersion'))]"
     database:
       name : "[parameters('sqlDatabaseName')]"
       kind: "[parameters('sqlDatabaseKind')]"

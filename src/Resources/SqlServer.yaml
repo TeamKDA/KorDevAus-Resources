@@ -80,10 +80,10 @@ parameters:
     allowedValues:
     - "12.0"
     defaultValue: "12.0"
-  sqlServerAdminUsername:
+  sqlServerAdminSuffix:
     type: string
     metadata:
-      description: The admin username for Azure SQL Server
+      description: The admin username suffix for Azure SQL Server
   sqlServerAdminPassword:
     type: securestring
     metadata:
@@ -97,7 +97,7 @@ variables:
     location: "[parameters('location')]"
     version: "[float(parameters('sqlServerVersion'))]"
     admin:
-      username: "[parameters('sqlServerAdminUsername')]"
+      username: "[concat(replace(variables('resourceNameShortTemplate'), '{0}', 'sqlsvr'), '_', parameters('sqlServerAdminSuffix'))]"
       password: "[parameters('sqlServerAdminPassword')]"
   tags:
     organisation: "[parameters('organisation')]"
