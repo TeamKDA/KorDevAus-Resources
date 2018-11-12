@@ -144,7 +144,7 @@ resources:
       AzureWebJobsDashboard: "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccount').name, ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccount').name), variables('storageAccount').apiVersion).keys[0].value, ';EndpointSuffix=core.windows.net')]"
       AzureWebJobsStorage: "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccount').name, ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccount').name), variables('storageAccount').apiVersion).keys[0].value, ';EndpointSuffix=core.windows.net')]"
       AzureWebJobsSecretStorageType: "[variables('functionApp').appSettings.secretStorageType]"
-      APPINSIGHTS_INSTRUMENTATIONKEY: "[reference(resourceId('Microsoft.Insights/components', variables('appInsights').name), variables('appInsights').apiVersion, 'Full').instrumentationKey]"
+      APPINSIGHTS_INSTRUMENTATIONKEY: "[reference(resourceId('Microsoft.Insights/components', variables('appInsights').name), variables('appInsights').apiVersion, 'Full').properties.instrumentationKey]"
       FUNCTIONS_EXTENSION_VERSION: ~2
       FUNCTION_APP_EDIT_MODE: readonly
       FUNCTIONS_WORKER_RUNTIME: "[variables('functionApp').appSettings.workerRuntimeType]"

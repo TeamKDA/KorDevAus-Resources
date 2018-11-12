@@ -143,7 +143,7 @@ resources:
     dependsOn:
     - "[resourceId('Microsoft.Web/Sites', variables('webApp').name)]"
     properties:
-      APPINSIGHTS_INSTRUMENTATIONKEY: "[reference(resourceId('Microsoft.Insights/components', variables('appInsights').name), variables('appInsights').apiVersion, 'Full').instrumentationKey]"
+      APPINSIGHTS_INSTRUMENTATIONKEY: "[reference(resourceId('Microsoft.Insights/components', variables('appInsights').name), variables('appInsights').apiVersion, 'Full').properties.instrumentationKey]"
   - comments: "### RESOURCE: WEB CONFIGS ###"
     apiVersion: "[variables('webApp').apiVersion]"
     type: config
