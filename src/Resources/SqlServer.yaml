@@ -95,7 +95,7 @@ variables:
     name: "[replace(variables('resourceNameLongTemplate'), '{0}', concat('sqlsvr', parameters('resourceTypeSuffix')))]"
     apiVersion: "[providers('Microsoft.Sql', 'servers').apiVersions[0]]"
     location: "[parameters('location')]"
-    version: "[float(parameters('sqlServerVersion'))]"
+    version: "[parameters('sqlServerVersion')]"
     admin:
       username: "[concat(replace(variables('resourceNameShortTemplate'), '{0}', 'sqlsvr'), '_', parameters('sqlServerAdminSuffix'))]"
       password: "[parameters('sqlServerAdminPassword')]"
