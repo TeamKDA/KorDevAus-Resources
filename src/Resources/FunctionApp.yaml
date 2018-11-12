@@ -73,6 +73,15 @@ parameters:
       description: The name of the project the resource group or resource was provisioned for.
     defaultValue: NOT_SET
   
+  appInsightsLocationCode:
+    type: string
+    metadata:
+      description: The Azure region that the Application Insights is deployed to.
+    allowedValues:
+    - ase
+    - aue
+    - usc
+    defaultValue: usc
   functionAppSecretStorageType:
     type: string
     metadata:
@@ -107,7 +116,7 @@ variables:
     name: "[replace(replace(variables('resourceNameShortTemplate'), '{0}', concat('st', parameters('resourceTypeSuffix'))), '{1}', '')]"
     apiVersion: "[providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]]"
   appInsights:
-    name: "[replace(replace(variables('resourceNameLongTemplate'), '{0}', concat('appins', parameters('resourceTypeSuffix'))), '{1}', parameters('operation'))]"
+    name: "[replace(replace(replace(variables('resourceNameLongTemplate'), parameters('locationCode'), parameters('appInsightsLocationCode')), '{0}', concat('appins', parameters('resourceTypeSuffix'))), '{1}', parameters('operation'))]"
     apiVersion: "[providers('Microsoft.Insights', 'components').apiVersions[0]]"
   tags:
     organisation: "[parameters('organisation')]"

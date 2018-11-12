@@ -52,7 +52,7 @@ parameters:
     - ase
     - aue
     - usc
-    defaultValue: ase
+    defaultValue: usc
   resourceTypeSuffix:
     type: string
     metadata:
