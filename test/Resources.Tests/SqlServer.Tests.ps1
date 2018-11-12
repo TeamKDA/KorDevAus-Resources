@@ -28,7 +28,7 @@ Describe "SQL Server Deployment Tests" {
         $organisationCode = "kda"
         $environmentCode = "lcl"
         $locationCode = "ase"
-        $sqlServerAdminUsername = "sqladmin"
+        $sqlServerAdminSuffix = "admin"
         $sqlServerAdminPassword = ConvertTo-SecureString "loremipsum" -AsPlainText -Force
         $output = az group deployment validate `
             -g $ResourceGroupName `
@@ -36,7 +36,7 @@ Describe "SQL Server Deployment Tests" {
             --parameters organisationCode=$organisationCode `
                          environmentCode=$environmentCode `
                          locationCode=$locationCode `
-                         sqlServerAdminUsername=$sqlServerAdminUsername `
+                         sqlServerAdminSuffix=$sqlServerAdminSuffix `
                          sqlServerAdminPassword=$sqlServerAdminPassword `
             | ConvertFrom-Json
         
