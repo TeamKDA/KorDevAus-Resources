@@ -145,7 +145,7 @@ variables:
     accessPolicies:
       spnObjectIds:
         vsts: "[parameters('spnObjectIdVsts')]"
-        keyVaultReader: "[parameters('spnObjectIdKeyVaultReader')]"
+        keyVault: "[parameters('spnObjectIdKeyVault')]"
       permissions:
         keys: "[split(parameters('keysPermissions'), ',')]"
         secrets: "[split(parameters('secretsPermissions'), ',')]"
@@ -175,7 +175,7 @@ resources:
         keys: "[variables('keyVault').accessPolicies.permissions.keys]"
         secrets: "[variables('keyVault').accessPolicies.permissions.secrets]"
     - tenantId: "[variables('keyVault').tenantId]"
-      objectId: "[variables('keyVault').accessPolicies.spnObjectIds.keyVaultReader]"
+      objectId: "[variables('keyVault').accessPolicies.spnObjectIds.keyVault]"
       permissions:
         keys: "[variables('keyVault').accessPolicies.permissions.keys]"
         secrets: "[variables('keyVault').accessPolicies.permissions.secrets]"
