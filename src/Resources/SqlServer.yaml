@@ -128,4 +128,4 @@ resources:
 outputs:
   sqlServerName:
     type: string
-    value: "[varibles('sqlServer').name]"
+    value: "[variables('sqlServer').name]"
