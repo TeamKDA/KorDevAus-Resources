@@ -29,7 +29,7 @@ Describe "Key Vault Deployment Tests" {
         $environmentCode = "lcl"
         $locationCode = "ase"
         $spnObjectIdVsts = [guid]::NewGuid().ToString()
-        $spnObjectIdKeyVaultReader = [guid]::NewGuid().ToString()
+        $spnObjectIdKeyVault = [guid]::NewGuid().ToString()
         $output = az group deployment validate `
             -g $ResourceGroupName `
             --template-file $SrcDirectory\KeyVault.json `
@@ -37,7 +37,7 @@ Describe "Key Vault Deployment Tests" {
                          environmentCode=$environmentCode `
                          locationCode=$locationCode `
                          spnObjectIdVsts=$spnObjectIdVsts `
-                         spnObjectIdKeyVaultReader=$spnObjectIdKeyVaultReader `
+                         spnObjectIdKeyVault=$spnObjectIdKeyVault `
             | ConvertFrom-Json
         
         $result = $output.properties

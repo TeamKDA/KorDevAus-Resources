@@ -114,7 +114,7 @@ parameters:
     type: string
     metadata:
       description: Object Id of the VSTS SPN AD user. Get using Get-AzureRmADUser or Get-AzureRmADServicePrincipal cmdlets
-  spnObjectIdKeyVaultReader:
+  spnObjectIdKeyVault:
     type: string
     metadata:
       description: Object Id of the KeyVault Reader SPN AD user. Get using Get-AzureRmADUser or Get-AzureRmADServicePrincipal cmdlets
