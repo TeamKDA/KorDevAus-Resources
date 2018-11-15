@@ -11,7 +11,7 @@ Param(
     [bool] [Parameter(Mandatory=$false)] $IsLocal = $false
 )
 
-Describe "Web App Deployment Tests" {
+Describe "App Service Deployment Tests" {
     # Init
     BeforeAll {
         if ($IsLocal -eq $false) {
@@ -24,18 +24,20 @@ Describe "Web App Deployment Tests" {
     }
 
     # Tests whether the cmdlet returns value or not.
-    Context "When Web App deployed with parameters" {
+    Context "When App Service deployed with parameters" {
         $organisationCode = "kda"
         $environmentCode = "lcl"
         $locationCode = "ase"
         $operation = "hello-world"
+        $appServiceKind = "app"
         $output = az group deployment validate `
             -g $ResourceGroupName `
-            --template-file $SrcDirectory\WebApp.json `
+            --template-file $SrcDirectory\AppService.json `
             --parameters organisationCode=$organisationCode `
                          environmentCode=$environmentCode `
                          locationCode=$locationCode `
                          operation=$operation `
+                         appServiceKind=$appServiceKind `
             | ConvertFrom-Json
         
         $result = $output.properties

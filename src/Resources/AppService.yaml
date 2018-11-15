@@ -73,6 +73,14 @@ parameters:
       description: The name of the project the resource group or resource was provisioned for.
     defaultValue: NOT_SET
 
+  appServiceKind:
+    type: string
+    metadata:
+      description: The kind of App Service.
+    allowedValues:
+    - api
+    - app
+    defaultValue: app
   appInsightsLocationCode:
     type: string
     metadata:
@@ -108,10 +116,11 @@ variables:
   appServicePlan:
     name: "[replace(replace(variables('resourceNameLongTemplate'), '{0}', 'asplan'), '-{1}', '')]"
     apiVersion: "[providers('Microsoft.Web', 'serverfarms').apiVersions[0]]"
-  webApp:
-    name: "[replace(replace(variables('resourceNameLongTemplate'), '{0}', concat('webapp', parameters('resourceTypeSuffix'))), '{1}', parameters('operation'))]"
+  appService:
+    name: "[replace(replace(variables('resourceNameLongTemplate'), '{0}', concat(if(equals(parameters('appServiceKind'), 'api'), 'apiapp', 'webapp'), parameters('resourceTypeSuffix'))), '{1}', parameters('operation'))]"
     apiVersion: "[providers('Microsoft.Web', 'sites').apiVersions[0]]"
     location: "[parameters('location')]"
+    kind: "[parameters('appServiceKind')]"
     remoteDebuggingEnabled: "[parameters('remoteDebuggingEnabled')]"
     remoteDebuggingVersion: "[parameters('remoteDebuggingVersion')]"
     use32bitWorkerProcess: "[parameters('use32bitWorkerProcess')]"
@@ -123,40 +132,40 @@ variables:
     environment: "[parameters('environment')]"
     projectName: "[parameters('projectName')]"
 resources:
-- comments: "### RESOURCE: WEB APP ###"
-  apiVersion: "[variables('webApp').apiVersion]"
+- comments: "### RESOURCE: APP SERVICE ###"
+  apiVersion: "[variables('appService').apiVersion]"
   type: Microsoft.Web/sites
-  kind: app
-  location: "[variables('webApp').location]"
+  kind: "[variables('appService').kind]"
+  location: "[variables('appService').location]"
   tags: "[variables('tags')]"
-  name: "[variables('webApp').name]"
+  name: "[variables('appService').name]"
   properties:
-    name: "[variables('webApp').name]"
+    name: "[variables('appService').name]"
     clientAffinityEnabled: true
     httpsOnly: true
     serverFarmId: "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlan').name)]"
   resources:
   - comments: "### RESOURCE: APP SETTINGS ###"
-    apiVersion: "[variables('webApp').apiVersion]"
+    apiVersion: "[variables('appService').apiVersion]"
     type: config
     name: appsettings
     dependsOn:
-    - "[resourceId('Microsoft.Web/Sites', variables('webApp').name)]"
+    - "[resourceId('Microsoft.Web/Sites', variables('appService').name)]"
     properties:
       APPINSIGHTS_INSTRUMENTATIONKEY: "[reference(resourceId('Microsoft.Insights/components', variables('appInsights').name), variables('appInsights').apiVersion, 'Full').properties.instrumentationKey]"
   - comments: "### RESOURCE: WEB CONFIGS ###"
-    apiVersion: "[variables('webApp').apiVersion]"
+    apiVersion: "[variables('appService').apiVersion]"
     type: config
     name: web
     dependsOn:
-    - "[resourceId('Microsoft.Web/sites', variables('webApp').name)]"
+    - "[resourceId('Microsoft.Web/sites', variables('appService').name)]"
     properties:
-      remoteDebuggingEnabled: "[variables('webApp').remoteDebuggingEnabled]"
-      remoteDebuggingVersion: "[variables('webApp').remoteDebuggingVersion]"
-      use32BitWorkerProcess: "[variables('webApp').use32bitWorkerProcess]"
+      remoteDebuggingEnabled: "[variables('appService').remoteDebuggingEnabled]"
+      remoteDebuggingVersion: "[variables('appService').remoteDebuggingVersion]"
+      use32BitWorkerProcess: "[variables('appService').use32bitWorkerProcess]"
       alwaysOn: true
       ftpsState: Disabled
 outputs:
   hostname:
     type: string
-    value: "[concat('https://', reference(variables('webApp').name).hostNames[0])]"
+    value: "[concat('https://', reference(variables('appService').name).hostNames[0])]"
