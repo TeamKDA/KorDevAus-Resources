@@ -5,7 +5,7 @@
 Param(
     [string] [Parameter(Mandatory=$true)] $ResourceGroupName,
     [string] [Parameter(Mandatory=$true)] $WebAppName,
-    [hashtable] [Parameter(Mandatory=$true)] $AppSettings,
+    [hashtable] [Parameter(Mandatory=$false)] $AppSettings = $null,
     [hashtable] [Parameter(Mandatory=$false)] $SqlConnectionStrings = $null,
     [hashtable] [Parameter(Mandatory=$false)] $CustomConnectionStrings = $null
 )
@@ -20,9 +20,12 @@ foreach($kvp in $existingAppSettings)
     $newAppSettings[$kvp.Name] = $kvp.Value
 }
 
-foreach($key in $AppSettings.Keys)
+if ($AppSettings -ne $null)
 {
-    $newAppSettings[$key] = $AppSettings[$key]
+    foreach($key in $AppSettings.Keys)
+    {
+        $newAppSettings[$key] = $AppSettings[$key]
+    }
 }
 
 $newConnectionStrings = @{}
